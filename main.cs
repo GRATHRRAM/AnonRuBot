@@ -114,18 +114,18 @@ async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, Cancel
                cancellationToken: cancellationToken);
         }
     } 
-    else if (messageText.Substring(0, 5) == "/name")
+    else if (messageText.Length > 6)
     {
-        if (GlobalR.ContainsKey(chatId))
+        if (messageText.Substring(0,5) == "/name")
         {
-            if (messageText.Length > 6)
+            if (GlobalR.ContainsKey(chatId))
             {
                 string old = GlobalR[chatId];
                 GlobalR[chatId] = messageText.Substring(6);
                 Message sentMessage = await botClient.SendTextMessageAsync(
-                   chatId: chatId,
-                   text: "Name Changed To " + messageText.Substring(6),
-                   cancellationToken: cancellationToken);
+                chatId: chatId,
+                text: "Name Changed To " + messageText.Substring(6),
+                cancellationToken: cancellationToken);
 
                 foreach (var buff in GlobalR)
                 {
@@ -141,17 +141,10 @@ async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, Cancel
             else
             {
                 Message sentMessage = await botClient.SendTextMessageAsync(
-                   chatId: chatId,
-                   text: "Command Not Used Correctly!",
-                   cancellationToken: cancellationToken);
+                       chatId: chatId,
+                       text: "You Need To Be Connected To Change Name!",
+                       cancellationToken: cancellationToken);
             }
-        }
-        else
-        {
-            Message sentMessage = await botClient.SendTextMessageAsync(
-                   chatId: chatId,
-                   text: "You Need To Be Connected To Change Name!",
-                   cancellationToken: cancellationToken);
         }
     }
     else if (messageText == "/help")
